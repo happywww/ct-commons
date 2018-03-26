@@ -49,6 +49,8 @@ dependencies {
 
     // mysql connector library
     runtime 'mysql:mysql-connector-java:5.1.39'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.7.5'
+
 }
 buildscript {
     //ext.kotlin_version = '1.1.4-3'

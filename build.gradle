@@ -1,0 +1,113 @@
+group 'com.constanttherapy.services'
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'war'
+apply plugin: 'idea'
+apply plugin: "com.jfrog.artifactory"
+apply plugin: 'maven-publish'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+ext {
+    outfile = 'ct-common-' + version + '.jar'
+    artifactory_contextUrl = 'http://localhost:8081/artifactory/'
+}
+
+dependencies {
+    //compile project(':ct-android-share')
+
+    providedCompile "javax.servlet:javax.servlet-api:3.1.0"
+
+    // useful utilities
+    compile 'commons-configuration:commons-configuration:1.8'
+    compile 'commons-dbutils:commons-dbutils:1.5'
+    compile 'commons-io:commons-io:2.4'
+    compile 'commons-validator:commons-validator:1.4.0'
+
+    // used for logging
+    compile 'log4j:log4j:1.2.17'
+
+    // stripe library (for payments)
+    compile 'com.stripe:stripe-java:1.23.0'
+
+    // Amazon AWS SDK
+    compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.172'
+
+    // Test.
+    //testCompile 'org.mockito:mockito-all:1.9.5'
+    compile 'org.mockito:mockito-core:1.10.19'
+    compile 'junit:junit:4.10'
+
+    // old version of jersey
+    compile 'com.sun.jersey:jersey-client:1.19.4'
+    compile 'com.sun.jersey:jersey-core:1.19.4'
+    runtime 'com.sun.jersey:jersey-server:1.19.4'
+    runtime 'com.sun.jersey:jersey-servlet:1.19.4'
+    runtime 'com.sun.jersey.contribs:jersey-multipart:1.19.4'
+
+    // mysql connector library
+    runtime 'mysql:mysql-connector-java:5.1.39'
+}
+buildscript {
+    //ext.kotlin_version = '1.1.4-3'
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.30"
+        //Check for the latest version here: http://plugins.gradle.org/plugin/com.jfrog.artifactory
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4+"
+        //classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+
+    }
+}
+repositories {
+    mavenCentral()
+}
+jar {
+    baseName = 'ct-common'
+    version =  '420'
+    from {
+        (configurations.runtime-configurations.providedCompile).collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+artifactory {
+    contextUrl = "${artifactory_contextUrl}"   //The base Artifactory URL if not overridden by the publisher/resolver
+    publish {
+        defaults {
+            publications('mavenJava')
+            publishArtifacts = true
+            publishPom = true
+        }
+        repository {
+            repoKey = 'gradle-dev-local'
+            username = 'admin'
+            password = 'password'
+            maven = true
+
+        }
+    }
+    resolve {
+        repository {
+            repoKey = 'gradle-dev'
+            username = "${artifactory_user}"
+            password = "${artifactory_password}"
+            maven = true
+
+        }
+    }
+}

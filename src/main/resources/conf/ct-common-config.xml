@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+    <!-- Server Version -->
+    <ct-server-version>4.3.1</ct-server-version>
+
+    <!-- Client Version -->
+    <ct-client-version>4.3</ct-client-version>
+
+    <!-- Resource Version -->
+    <ct-version>3.1.0</ct-version>
+
+    <ct-report-service-path>ct-report-430</ct-report-service-path>
+    <ct-alert-service-path>ct-report-430</ct-alert-service-path>
+    <ct-messaging-service-path>ct-messaging-430</ct-messaging-service-path>
+    <ct-service-path>ct-service-430</ct-service-path>
+
+    <!-- Folder for saving response files -->
+    <response-file-folder>/usr/share/tomcat7/uploads/</response-file-folder>
+
+    <!-- Database Connection Info -->
+
+    <db-connection-properties>
+        connectTimeout=10000&amp;socketTimeout=360000&amp;useLegacyDatetimeCode=false&amp;useSSL=false&amp;user=ctroot&amp;password=ctr0ck55
+    </db-connection-properties>
+
+    <databases>
+        <database>constant_therapy</database>
+        <database>ct_customer</database>
+    </databases>
+
+    <db-servers>
+        <!-- prod -->
+        <db-server name="prod">
+            jdbc:mysql://ctprod.cjzbdqrkmkks.us-east-1.rds.amazonaws.com:3306
+        </db-server>
+        <db-server name="prod_slave">
+            jdbc:mysql://ctprod-readonly.cjzbdqrkmkks.us-east-1.rds.amazonaws.com:3306
+        </db-server>
+
+        <!-- dev -->
+        <db-server name="dev">
+            jdbc:mysql://ct-dev.cluster-cjzbdqrkmkks.us-east-1.rds.amazonaws.com:3306
+        </db-server>
+        <db-server name="dev_slave">
+            jdbc:mysql://ct-dev.cluster-ro-cjzbdqrkmkks.us-east-1.rds.amazonaws.com:3306
+        </db-server>
+
+        <!-- hindi -->
+        <db-server name="hindi">
+            jdbc:mysql://localhost:3306
+        </db-server>
+        <db-server name="hindi_slave">
+            jdbc:mysql://localhost:3306
+        </db-server>
+
+        <!-- localhost -->
+        <db-server name="local">
+            jdbc:mysql://localhost:3306
+        </db-server>
+
+        <db-server name="local_slave">
+            jdbc:mysql://localhost:3307
+        </db-server>
+    </db-servers>
+
+    <db-clients>
+        <!-- use local db server by default -->
+        <db-client name="default">local</db-client>
+
+        <!-- ctdev -->
+        <db-client name="ip-10-186-41-48">dev</db-client>
+        <db-client name="ip-10-69-24-211">dev</db-client>
+
+        <!-- ctprod -->
+        <db-client name="ip-10-153-166-142">prod</db-client>
+
+        <!-- 2017-12-21 - added NEW ctprod -->
+        <db-client name="ip-10-65-199-149">prod</db-client>
+
+        <!-- ctprod2 -->
+        <db-client name="ip-10-144-229-171">prod</db-client>
+
+        <!-- hindi server -->
+        <db-client name="ip-10-5-231-195">hindi</db-client>
+
+    </db-clients>
+
+    <!-- Resource Url -->
+    <ct-resource-url>https://s3.amazonaws.com/CT-resources/</ct-resource-url>
+
+    <aws-access-key>AKIAIHOL2ZX225WBNQKA</aws-access-key>
+    <aws-secret-key>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</aws-secret-key>
+
+    <ct-resource-response-bucket>ctresponses</ct-resource-response-bucket>
+    <ct-resource-comments-bucket>ctcomments</ct-resource-comments-bucket>
+
+    <ct-resource-comments-bucket-dev>ctcomments-dev</ct-resource-comments-bucket-dev>
+    <ct-resource-response-bucket-dev>ctresponses-dev</ct-resource-response-bucket-dev>
+
+    <ct-resource-comments-bucket-hi>ctcomments-hindi</ct-resource-comments-bucket-hi>
+    <ct-service-server-url>https://localhost/ct-service-430/</ct-service-server-url>
+    <support-mail>support@constanttherapy.com</support-mail>
+
+    <!-- replicated from ct-service-config.xml  -->
+    <max-scheduled-task-type-task-count>200</max-scheduled-task-type-task-count>
+</config>
